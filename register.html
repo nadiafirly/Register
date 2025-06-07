@@ -1,19 +1,148 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Register - Nadya Sosial Media</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f2f2f2; margin: 0; }
-    header { background: #007bff; color: white; padding: 1em; text-align: center; }
-    nav a { margin: 0 10px; color: white; text-decoration: none; font-weight: bold; }
-    .container { max-width: 400px; margin: 50px auto; background: white; padding: 20px; border-radius: 8px; }
-    input, button { width: 100%; padding: 10px; margin: 10px 0; }
-    button { background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #ffffff);
+      margin: 0;
+      padding: 0;
+      animation: fadeIn 0.7s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .marquee {
+      background: #ff5722;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      font-size: 1rem;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 12s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    header {
+      background: #007bff;
+      color: white;
+      padding: 1.5em 1em;
+      text-align: center;
+    }
+
+    nav a {
+      margin: 0 15px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #ffeb3b;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px 25px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.6s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0,123,255,0.4);
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background: #0056b3;
+      transform: scale(1.03);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 6px;
+      display: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 999;
+    }
+
+    .toast.show {
+      display: block;
+      animation: fadeOut 3s forwards;
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; display: none; }
+    }
   </style>
 </head>
 <body>
+
+  <div class="marquee">
+    <span>🔥 web ini dibuat buat latihan 🔥</span>
+  </div>
+
   <header>
     <h1>Register</h1>
     <nav>
@@ -23,11 +152,43 @@
   </header>
 
   <div class="container">
-    <h2>Register</h2>
-    <input type="text" placeholder="Username">
-    <input type="password" placeholder="Password">
-    <input type="password" placeholder="Konfirmasi Password">
-    <button>Register</button>
+    <h2>Daftar Akun Baru</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <input type="password" id="confirm" placeholder="Konfirmasi Password" />
+    <button onclick="register()">Register</button>
   </div>
+
+  <div class="toast" id="toast">✅ Pendaftaran berhasil!</div>
+
+  <script>
+    function register() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const confirm = document.getElementById("confirm").value;
+      const toast = document.getElementById("toast");
+
+      if (!username || !password || !confirm) {
+        alert("⚠️ Semua kolom harus diisi.");
+        return;
+      }
+
+      if (password !== confirm) {
+        alert("❌ Password tidak cocok.");
+        return;
+      }
+
+      // Tampilkan toast
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+
+      // Reset form
+      document.getElementById("username").value = "";
+      document.getElementById("password").value = "";
+      document.getElementById("confirm").value = "";
+    }
+  </script>
 </body>
 </html>
