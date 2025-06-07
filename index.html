@@ -1,26 +1,189 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Beranda - Nadya Sosial Media</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f2f2f2; margin: 0; }
-    header { background: #007bff; color: white; padding: 1em; text-align: center; }
-    nav a { margin: 0 10px; color: white; text-decoration: none; font-weight: bold; }
-    .container { max-width: 500px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; }
-    input, select, textarea { width: 100%; padding: 10px; margin: 10px 0; }
-    button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
-    h2 { margin-top: 0; }
+    :root {
+      --bg-light: #f2f2f2;
+      --bg-dark: #1a1a1a;
+      --text-light: #333;
+      --text-dark: #f2f2f2;
+      --container-light: white;
+      --container-dark: #2c2c2c;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: var(--bg-light);
+      color: var(--text-light);
+      transition: background 0.5s, color 0.5s;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    header {
+      background: #007bff;
+      color: white;
+      padding: 1.5em 1em;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .typing {
+      font-size: 1.2rem;
+      font-weight: normal;
+      height: 1.5em;
+    }
+
+    nav a {
+      margin: 0 15px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #ffeb3b;
+    }
+
+    .mode-toggle {
+      margin-top: 10px;
+      background: #fff;
+      color: #333;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background: var(--container-light);
+      color: inherit;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: background 0.5s;
+    }
+
+    body.dark .container {
+      background: var(--container-dark);
+    }
+
+    select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0 20px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background: #0056b3;
+      transform: scale(1.03);
+    }
+
+    .post {
+      margin-top: 30px;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+    }
+
+    .post img {
+      width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .profile img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .like-btn {
+      background: #eee;
+      border: none;
+      padding: 6px 12px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: background 0.3s;
+    }
+
+    .like-btn:hover {
+      background: #ffd54f;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 6px;
+      display: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 999;
+    }
+
+    .toast.show {
+      display: block;
+      animation: fadeOut 3s forwards;
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; display: none; }
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>Selamat Datang Di Nadya Sosial Media</h1>
+    <h1>Nadyadfilyni Sosial Media</h1>
+    <div class="typing" id="typing-text"></div>
     <nav>
       <a href="login.html">Login</a>
       <a href="register.html">Register</a>
     </nav>
+    <button class="mode-toggle" onclick="toggleMode()">🌓 Mode Gelap</button>
   </header>
 
   <div class="container">
@@ -30,15 +193,75 @@
       <option value="teks">Teks</option>
       <option value="gambar">Gambar</option>
     </select>
-    <textarea placeholder="Bali, 2 juli 2023"></textarea>
-    <button>Posting</button>
-    <hr>
-    <div>
-      <p><strong>NP</strong></p>
-      <p>2025-05-25 09:38:12</p>
+    <textarea id="post-content" placeholder="Tulis sesuatu..."></textarea>
+    <button onclick="showToast()">Posting</button>
+
+    <div class="post">
+      <div class="profile">
+        <img src="https://i.pravatar.cc/100?img=12" alt="profil">
+        <div>
+          <p><strong>NP</strong></p>
+          <p style="font-size: 0.9rem; color: gray;">2025-05-25 09:38:12</p>
+        </div>
+      </div>
       <p>mantab</p>
-      <img src="Nadya.jpg" alt="salah apa" style="width: 100%;">
+      <img src="Nadya.jpg" alt="Postingan Gambar">
+      <button class="like-btn" onclick="likePost(this)">❤️ Suka</button>
     </div>
   </div>
+
+  <div class="toast" id="toast">✅ Postingan berhasil dikirim!</div>
+
+  <script>
+    // Toast function
+    function showToast() {
+      const toast = document.getElementById("toast");
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    // Like button
+    function likePost(btn) {
+      btn.innerHTML = "💖 Disukai!";
+      btn.style.background = "#ffcccb";
+    }
+
+    // Dark mode toggle
+    function toggleMode() {
+      document.body.classList.toggle("dark");
+    }
+
+    // Typing effect
+    const typingText = document.getElementById("typing-text");
+    const texts = ["Selamat datang!", "Aku cantik nggak gaess.", "semoga harimu menyenangkan !"];
+    let i = 0, j = 0, currentText = '', isDeleting = false;
+
+    function type() {
+      if (i < texts.length) {
+        if (!isDeleting && j <= texts[i].length) {
+          currentText = texts[i].substring(0, j++);
+        } else if (isDeleting && j > 0) {
+          currentText = texts[i].substring(0, j--);
+        }
+
+        typingText.innerHTML = currentText;
+
+        if (!isDeleting && j === texts[i].length) {
+          isDeleting = true;
+          setTimeout(type, 1000);
+        } else if (isDeleting && j === 0) {
+          isDeleting = false;
+          i = (i + 1) % texts.length;
+          setTimeout(type, 300);
+        } else {
+          setTimeout(type, isDeleting ? 50 : 100);
+        }
+      }
+    }
+
+    type();
+  </script>
 </body>
 </html>
